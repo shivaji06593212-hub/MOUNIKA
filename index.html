@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Mounika 🎂</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background: linear-gradient(135deg, #1a001a, #4d003d);
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    overflow:hidden;
+    text-align:center;
+    height:100vh;
+  }
+  h1{
+    font-size: 2.8rem;
+    margin-top: 20vh;
+    text-shadow: 0 0 20px #ff00ff, 0 0 40px #ff1493;
+    animation: glow 2s infinite alternate;
+  }
+  @keyframes glow{from{text-shadow:0 0 10px #ff00ff}to{text-shadow:0 0 40px #ff1493}}
+  p{font-size:1.2rem;margin:20px;color:#ffb6e6}
+  .btn{
+    background: linear-gradient(45deg,#ff1493,#ff69b4);
+    border:none;padding:15px 30px;border-radius:50px;
+    font-size:1.2rem;color:white;cursor:pointer;
+    box-shadow:0 0 20px #ff1493;
+    transition:0.3s;
+  }
+  .btn:hover{transform:scale(1.1)}
+  .balloon{
+    position:absolute;bottom:-150px;width:60px;height:80px;
+    border-radius:50%;animation:float 8s infinite;
+  }
+  @keyframes float{to{transform:translateY(-110vh) rotate(360deg);opacity:0}}
+  .heart{
+    position:absolute;font-size:20px;color:red;animation:fall 5s linear infinite;
+  }
+  @keyframes fall{to{transform:translateY(100vh);opacity:0}}
+  canvas{position:absolute;top:0;left:0;pointer-events:none}
+  audio{display:none}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+
+<h1>🎂 Happy Birthday Mounika 🎂</h1>
+<p>💖 To the most amazing girl... May your day be filled with love, laughter and magic 💖</p>
+
+<button class="btn" onclick="surprise()">🎁 Click for Surprise</button>
+
+<audio id="bgmusic" loop>
+  <source src="birthday.mp3" type="audio/mp3"> 
+</audio>
+
+<script>
+// Floating balloons
+for(let i=0;i<12;i++){
+  let b=document.createElement('div');
+  b.className='balloon';
+  b.style.left=Math.random()*100+'%';
+  b.style.background=`hsl(${Math.random()*360},100%,70%)`;
+  b.style.animationDelay=i+'s';
+  document.body.appendChild(b);
+}
+
+// Animated hearts
+setInterval(()=>{
+  let h=document.createElement('div');
+  h.className='heart';
+  h.innerHTML='❤️';
+  h.style.left=Math.random()*100+'%';
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),5000);
+},300)
+
+// Confetti
+const canvas=document.getElementById('confetti'),ctx=canvas.getContext('2d');
+canvas.width=innerWidth;canvas.height=innerHeight;
+let pieces=[];
+function surprise(){
+  document.getElementById('bgmusic').play();
+  for(let i=0;i<200;i++){
+    pieces.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height-100,
+      r:Math.random()*6+4,c:`hsl(${Math.random()*360},100%,50%)`,v:Math.random()*3+2})
+  }
+}
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  pieces.forEach(p=>{
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c;ctx.fill();
+    p.y+=p.v;p.x+=Math.sin(p.y/20);
+  })
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>
